@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 const Products = ({ page }) => {
   const classes = useStyles();
   let [products, setProducts] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -29,7 +28,6 @@ const Products = ({ page }) => {
       `http://localhost:5000/api/products/?page=${page}&limit=10`
     );
     const data = await res.json();
-    setTotalPages(data.totalPages);
     setProducts(data.result);
   };
 

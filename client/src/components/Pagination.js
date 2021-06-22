@@ -7,13 +7,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomPagination = ({ count, page, onChange }) => {
+const CustomPagination = ({ count, page, onChange, onClick }) => {
   const classes = useStyles();
   return (
     <Pagination
       count={count}
       page={page}
-      onChange={onChange}
+      onClick={onClick ? onClick : undefined}
+      onChange={onChange ? onChange : undefined}
       color="primary"
       className={classes.pagination}
     />

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import About from "./components/About";
-import Products from "./components/HomeProductSection";
 import ProductCategory from "./components/LEGACY_CODE/ProductCategory";
 import ItemPage from "./components/ItemPage";
 import ProductsPage from "./components/ProductsPage";
@@ -49,29 +48,19 @@ function App() {
               path="/"
               render={(props) => <Redirect to="/home" {...props} />}
             />
-
-            {/* HOMEPAGE */}
             <Route exact path="/home" render={(props) => <Home {...props} />} />
-
-            {/* SIGN IN */}
             <Route
               path="/auth/login"
               render={(props) => <Login {...props} />}
             />
-
-            {/* SIGN UP */}
             <Route
               path="/auth/signup"
               render={(props) => <SignUp {...props} />}
             />
-
-            {/* FETCH ALL ITEMS => REDIRECT TO PAGE 1 */}
             <Route
               exact
               path="/products"
-              render={(props) => (
-                <Redirect {...props} to="/products/p/:pageNumber" />
-              )}
+              render={(props) => <Redirect {...props} to="/products/p/1" />}
             />
             <Route
               exact
@@ -79,12 +68,11 @@ function App() {
               render={(props) => <ProductsPage {...props} />}
             />
 
-            {/* FETCH CATEGORY ITEMS  => REDIRECT TO PAGE 1*/}
             <Route
               exact
               path="/products/:category"
               render={(props) => (
-                <Redirect to="/products/:category/p/:pageNumber" {...props} />
+                <Redirect to={`/products/${props.match.params.category}/p/1`} />
               )}
             />
             <Route
@@ -92,8 +80,6 @@ function App() {
               path="/products/:category/p/:pageNumber"
               render={(props) => <ProductCategory {...props} />}
             />
-
-            {/* FETCH A SPECIFIC ITEM */}
             <Route
               exact
               path="/product/id/:productID"
@@ -103,12 +89,10 @@ function App() {
             <Route
               path="/admin/dashboard"
               render={() =>
-                !userInfo.customer_isadmin ? <Dashboard /> : <NotAllowedPage />
+                userInfo.customer_isadmin ? <Dashboard /> : <NotAllowedPage />
               }
-              // REMOVE THE ! from the start of (userInfo.customer_isadmin)
             ></Route>
 
-            {/* ABOUT PAGE */}
             <Route
               exact
               path="/about"

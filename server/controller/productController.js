@@ -13,7 +13,7 @@ const addProduct = (req, res) => {
       try {
         const result = await db.query(
           "INSERT INTO product (product_name, product_details, product_img_link, product_category, product_review) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-          [name, details, img_link, category, review]
+          [name, details, img_link, category, +review]
         );
         const product = result.rows[0];
         res.json({ added: true, product });
@@ -48,10 +48,10 @@ const getAllProducts = async (req, res) => {
     let total = totalProducts.rows[0].count;
     let totalPages = Math.ceil(total / limit);
 
-    const result = await db.query("SELECT * from product OFFSET $1 LIMIT $2", [
-      offset,
-      limit,
-    ]);
+    const result = await db.query(
+      "SELECT * from product ORDER BY product_id OFFSET $1 LIMIT $2 ",
+      [offset, limit]
+    );
     res.json({ result: result.rows, page, totalPages });
   } catch (error) {
     console.log(error.message);

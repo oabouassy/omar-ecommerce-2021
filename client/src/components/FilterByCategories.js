@@ -31,7 +31,9 @@ const FilterByCategories = () => {
   const classes = useStyles();
   const history = useHistory();
   const goToCategoryPage = (e) => {
-    history.push(`/products/${e.target.value}`);
+    const category = e.target.value;
+    console.log("url => ", `/products/${category}`);
+    history.push(`/products/${category}`);
   };
   const fetchCategories = async () => {
     const res = await fetch(`http://localhost:5000/api/products/categories`);
@@ -47,7 +49,7 @@ const FilterByCategories = () => {
           Category
         </InputLabel>
         <NativeSelect
-          onChange={(e) => goToCategoryPage(e)}
+          onChange={goToCategoryPage}
           inputProps={{
             name: "product",
             id: "product-categories",

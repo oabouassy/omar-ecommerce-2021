@@ -18,7 +18,8 @@ router.get("/", getAllProducts);
 // GET SPECIFIC PRODUCTS BY 'category'
 router.get("/specific", getProductsByCategory);
 
-router.post("/add", authorize, upload.single("image"), addProduct);
+router.post("/add", upload.single("image"), addProduct);
+// authorize
 
 router.delete("/delete/:id", authorize, deleteProduct);
 

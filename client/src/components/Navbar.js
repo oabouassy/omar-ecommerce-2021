@@ -25,15 +25,15 @@ const useStyles = makeStyles((theme) => ({
   btnLink: {
     color: "inherit",
     textDecoration: "none",
-    "&:hover": {
-      textDecoration: "underline",
-    },
+    // "&:hover": {
+    //   textDecoration: "underline",
+    // },
   },
 }));
 //
 const Navbar = () => {
   const classes = useStyles();
-  const [userInfo, setUserInfo] = useContext(userContext);
+  const [userInfo] = useContext(userContext);
   // DRAWER
   const [drawer, setDrawer] = useState(false);
   const toggleDrawer = (open) => (event) => {
@@ -44,12 +44,6 @@ const Navbar = () => {
       return;
     }
     setDrawer(open);
-  };
-  const signOut = (e) => {
-    e.preventDefault();
-    localStorage.removeItem("token");
-    setUserInfo({});
-    console.log("signout");
   };
   return (
     <div className={classes.root}>
@@ -70,9 +64,7 @@ const Navbar = () => {
           </Typography>
           <Link to="/auth/login" className={classes.btnLink}>
             {userInfo.customer_email ? (
-              <Button color="inherit" onClick={signOut}>
-                Sign Out
-              </Button>
+              <Button color="inherit">Sign Out</Button>
             ) : (
               <Button color="inherit">Login</Button>
             )}
