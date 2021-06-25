@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     marginTop: theme.spacing(3),
   },
+  noProducts: {
+    marginTop: theme.spacing(3),
+  },
 }));
 
 const Products = ({ page }) => {
@@ -35,35 +38,43 @@ const Products = ({ page }) => {
   const handlePageChange = () => {
     history.push(`/products/p/${++page}`);
   };
+  const displayProducts = () => {
+    return products.map((product) => (
+      <Grid item xs={12} sm={6} md={4} key={product.product_id}>
+        <Link to={`/product/id/${product.product_id}`} className={classes.link}>
+          <MyCard
+            image={`http://localhost:5000${product.product_img_link}`}
+            header={product.product_name}
+            body={product.product_details}
+          />
+        </Link>
+      </Grid>
+    ));
+  };
   return (
     <div>
       <Container>
         <Typography variant="h4">Browse Our Products</Typography>
         <FilterByCategories />
         <Grid container spacing={2}>
-          {products.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.product_id}>
-              <Link
-                to={`/product/id/${product.product_id}`}
-                className={classes.link}
-              >
-                <MyCard
-                  image={`http://localhost:5000${product.product_img_link}`}
-                  header={product.product_name}
-                  body={product.product_details}
-                />
-              </Link>
-            </Grid>
-          ))}
+          {products.length !== 0 ? (
+            displayProducts()
+          ) : (
+            <Typography variant="h6" className={classes.noProducts}>
+              No Products Available
+            </Typography>
+          )}
         </Grid>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={handlePageChange}
-          className={classes.btn}
-        >
-          Show More Products
-        </Button>
+        {products.length !== 0 ? (
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handlePageChange}
+            className={classes.btn}
+          >
+            Show More Products
+          </Button>
+        ) : null}
       </Container>
     </div>
   );

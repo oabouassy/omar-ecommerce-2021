@@ -4,6 +4,7 @@ import { Grid, Typography, Container } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "./Pagination";
+import FilterByCategories from "./FilterByCategories";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductsPage = (props) => {
   const classes = useStyles();
-  // const page = +props.match.params.pageNumber;
   const [page, setPage] = useState(+props.match.params.pageNumber);
   let [totalPages, setTotalPages] = useState(page);
   let [products, setProducts] = useState([]);
@@ -44,6 +44,7 @@ const ProductsPage = (props) => {
       <Container className={classes.root}>
         <Typography variant="h3">All products</Typography>
         <Typography variant="body1">page: {page}</Typography>
+        <FilterByCategories />
         <Grid container spacing={2} className={classes.grid}>
           {products.map((product) => (
             <Grid item xs={12} sm={6} md={3} key={product.product_id}>
