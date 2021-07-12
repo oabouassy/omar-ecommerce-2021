@@ -1,30 +1,60 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Container, makeStyles, Typography } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import UserContext from "../context/userContext";
 import CartContext from "../context/CartContext";
-
+import { useHistory, Link } from "react-router-dom";
+import CartTable from "./CartTable";
 const useStyles = makeStyles(() => ({
   root: {
     marginTop: "8rem",
   },
+  link: {
+    textDecoration: "none",
+  },
 }));
 
 const Cart = () => {
+  const history = useHistory();
   const classes = useStyles();
   const [userInfo] = useContext(UserContext);
-  const [cartItems, setCartItems] = useContext(CartContext);
-  const fill = () => {
-    setCartItems(["Football", "T-shirt", "Boxer"]);
+  const [cartItems] = useContext(CartContext);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const SignInFirst = () => {
+    return (
+      <>
+        <Alert severity="warning">
+          Please sign in first —{" "}
+          <Link to="/auth/login" className={classes.link}>
+            sign in!
+          </Link>
+        </Alert>
+      </>
+    );
+  };
+  const ShowCartComponent = () => {
+    return (
+      <>
+        <Typography variant="h4">My Cart</Typography>;
+        {cartItems.length === 0 ? (
+          <Alert severity="info">
+            Your cart is empty —{" "}
+            <Link to="" className={classes.link}>
+              Explore our products now!
+            </Link>
+          </Alert>
+        ) : (
+          <div>
+            <CartTable setTotalPrice={setTotalPrice} />
+            <h3>Total: {totalPrice} $</h3>
+          </div>
+        )}
+      </>
+    );
   };
   return (
     <Container maxWidth="lg" className={classes.root}>
-      <Typography variant="h4">My Cart</Typography>;
-      <ul>
-        {cartItems.map((i) => (
-          <li key={i}>{i}</li>
-        ))}
-      </ul>
-      <button onClick={fill}>Fill</button>
+      {!userInfo.customer_id ? <SignInFirst /> : <ShowCartComponent />}
     </Container>
   );
 };

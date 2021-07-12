@@ -53,16 +53,11 @@ const FilterByCategories = (props) => {
             name: "product",
             id: "product-categories",
           }}
+          value={props.selectedCategory}
         >
-          <option value="" selected={props.selectedCategory === "all"}>
-            All
-          </option>
+          <option value="">All</option>
           {categories.map((category) => (
-            <option
-              value={category}
-              key={category}
-              selected={props.selectedCategory === category}
-            >
+            <option value={category} key={category}>
               {category}
             </option>
           ))}

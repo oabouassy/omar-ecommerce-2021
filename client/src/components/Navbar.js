@@ -11,6 +11,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { MyDrawer } from "./Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import userContext from "../context/userContext";
+import FloatingActionButton from "../components/FloatingActionButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,13 +22,15 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    "& > * ": {
+      color: "inherit",
+      textDecoration: "none",
+      letterSpacing: "2px",
+    },
   },
   btnLink: {
     color: "inherit",
     textDecoration: "none",
-    // "&:hover": {
-    //   textDecoration: "underline",
-    // },
   },
 }));
 //
@@ -58,10 +61,10 @@ const Navbar = () => {
           >
             <MenuIcon />
           </IconButton>
-
           <Typography variant="h6" className={classes.title}>
-            Omar Abouassy
+            <Link to="/">Omar Abouassy</Link>
           </Typography>
+          <FloatingActionButton />
           <Link to="/auth/login" className={classes.btnLink}>
             {userInfo.customer_email ? (
               <Button color="inherit">Sign Out</Button>

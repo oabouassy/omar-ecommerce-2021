@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Typography,
   Container,
@@ -6,7 +6,11 @@ import {
   Grid,
   Button,
 } from "@material-ui/core";
+import cartContext from "../context/CartContext";
+import userContext from "../context/userContext";
+import Tooltip from "@material-ui/core/Tooltip";
 
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "8rem",
@@ -20,18 +24,28 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "25rem",
     margin: "auto",
   },
-  // fContainer: {
-  //   background: "green",
-  // },
-  // sContainer: {
-  //   background: "yellow",
-  // },
+  button: {
+    display: "block",
+    marginTop: theme.spacing(2),
+    width: "80%",
+  },
+  link: {
+    display: "block",
+    marginTop: theme.spacing(2),
+    textDecoration: "none",
+    width: "80%",
+    "& > *": {
+      width: "100%",
+    },
+  },
 }));
 
 const ItemPage = (props) => {
   const classes = useStyles();
   const productID = props.match.params.productID;
   const [product, setProduct] = useState({});
+  const [cartItems, setCartItems] = useContext(cartContext);
+  const [userInfo] = useContext(userContext);
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -42,6 +56,28 @@ const ItemPage = (props) => {
     const data = await res.json();
     if (data.product) {
       setProduct(data.product);
+    }
+  };
+  const addToCart = () => {
+    let isHere = false;
+    for (let obj of cartItems) {
+      if (obj.product_name === product.product_name) {
+        ++obj.product_amount;
+        isHere = true;
+        return;
+      }
+    }
+    if (!isHere) {
+      const productData = {
+        product_id: product.product_id,
+        product_name: product.product_name,
+        product_category: product.product_category,
+        product_amount: 1,
+        product_price: product.product_price,
+      };
+      let temp = cartItems;
+      temp.push(productData);
+      setCartItems(temp);
     }
   };
   return (
@@ -73,27 +109,39 @@ const ItemPage = (props) => {
           <div className={classes.sContainer}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Typography variant="h6">
-                  {product.product_price} EGP
-                </Typography>
+                <Typography variant="h6">{product.product_price} $</Typography>
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="body1">
                   {product.product_details}
-                  {/* Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Autem, tempore, modi nobis distinctio praesentium optio
-                  expedita minus nihil laborum animi dignissimos, molestias
-                  ratione quasi fugit natus quae in. Dolorem, consequuntur
-                  facilis. Tempora maxime dolor laborum repudiandae, explicabo
-                  ipsum nobis dolores delectus necessitatibus nemo eligendi
-                  distinctio dicta. Dolore voluptatem illo ullam. */}
                 </Typography>
+                {userInfo.customer_id ? (
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    onClick={addToCart}
+                    className={classes.button}
+                  >
+                    Add to Cart
+                  </Button>
+                ) : (
+                  <Tooltip
+                    title="Sign in to add this product to your cart"
+                    placement="top"
+                  >
+                    <Link to="/auth/login" className={classes.link}>
+                      <Button color="secondary" variant="contained">
+                        Sign in
+                      </Button>
+                    </Link>
+                  </Tooltip>
+                )}
+
+                <Link to="/customer/cart" className={classes.link}>
+                  go to my cart
+                </Link>
               </Grid>
-              <Grid item>
-                <Button color="primary" variant="contained">
-                  Add to Cart
-                </Button>
-              </Grid>
+              {/* <Grid item></Grid> */}
             </Grid>
           </div>
         </Grid>
