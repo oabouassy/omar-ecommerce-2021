@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FilterByCategories = () => {
+const FilterByCategories = (props) => {
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -32,7 +32,6 @@ const FilterByCategories = () => {
   const history = useHistory();
   const goToCategoryPage = (e) => {
     const category = e.target.value;
-    console.log("url => ", `/products/${category}`);
     history.push(`/products/${category}`);
   };
   const fetchCategories = async () => {
@@ -55,9 +54,15 @@ const FilterByCategories = () => {
             id: "product-categories",
           }}
         >
-          <option value="">All</option>
+          <option value="" selected={props.selectedCategory === "all"}>
+            All
+          </option>
           {categories.map((category) => (
-            <option value={category} key={category}>
+            <option
+              value={category}
+              key={category}
+              selected={props.selectedCategory === category}
+            >
               {category}
             </option>
           ))}

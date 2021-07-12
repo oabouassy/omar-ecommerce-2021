@@ -56,7 +56,7 @@ const ProductCategory = (props) => {
     <div className={classes.root}>
       <Container>
         <Typography variant="h4">{category.toUpperCase()}</Typography>
-        <FilterByCategories />
+        <FilterByCategories selectedCategory={category} />
         {msg ? (
           <h1>{msg}</h1>
         ) : (

@@ -95,10 +95,24 @@ const getAllCategories = async (req, res) => {
   }
 };
 
+const getProduct = async (req, res) => {
+  const { id } = req.query;
+  try {
+    const result = await db.query(
+      "SELECT * FROM product WHERE product_id = $1",
+      [id]
+    );
+    res.json({ product: result.rows[0] });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json("Internal server error!");
+  }
+};
 module.exports = {
   addProduct,
   deleteProduct,
   getAllProducts,
   getProductsByCategory,
   getAllCategories,
+  getProduct,
 };

@@ -6,6 +6,7 @@ const {
   addProduct,
   deleteProduct,
   getAllCategories,
+  getProduct,
 } = require("../controller/productController");
 const authorize = require("../middleware/authorize");
 
@@ -18,8 +19,9 @@ router.get("/", getAllProducts);
 // GET SPECIFIC PRODUCTS BY 'category'
 router.get("/specific", getProductsByCategory);
 
-router.post("/add", upload.single("image"), addProduct);
-// authorize
+router.get("/single", getProduct);
+
+router.post("/add", authorize, upload.single("image"), addProduct);
 
 router.delete("/delete/:id", authorize, deleteProduct);
 

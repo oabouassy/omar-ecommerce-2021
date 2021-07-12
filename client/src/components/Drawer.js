@@ -17,6 +17,7 @@ import LockIcon from "@material-ui/icons/Lock";
 import { Link } from "react-router-dom";
 import userContext from "../context/userContext";
 import SettingsIcon from "@material-ui/icons/Settings";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const useStyles = makeStyles({
   list: {
@@ -55,6 +56,7 @@ export const MyDrawer = ({ drawer, toggleDrawer }) => {
         <List>
           {createListItem("Home", <HomeIcon />, "/")}
           {createListItem("Products", <StoreIcon />, "/products")}
+          {createListItem("Cart", <ShoppingCartIcon />, "/customer/cart")}
           {userInfo.customer_email
             ? createListItem(
                 "My Account",
