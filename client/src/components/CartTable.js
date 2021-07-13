@@ -27,7 +27,7 @@ const StyledTableCell = withStyles((theme) => ({
 }))(TableCell);
 
 // COMPONENT
-const CartTable = ({ setTotalPrice }) => {
+const CartTable = () => {
   const classes = useStyles();
   const [cartItems, setCartItems] = useContext(cartContext);
   return (
@@ -46,13 +46,13 @@ const CartTable = ({ setTotalPrice }) => {
         <TableBody>
           {cartItems.map((i) => (
             <CartTableItem
-              key={i.product_id}
-              id={i.product_id}
-              name={i.product_name}
-              category={i.product_category}
-              amount={i.product_amount}
-              price={i.product_price}
-              setTotalPrice={setTotalPrice}
+              key={i.id}
+              id={i.id}
+              name={i.name}
+              category={i.category}
+              amount={i.amountOfItems}
+              priceOfAllItems={i.priceOfAllItems}
+              priceOfOne={i.priceOfOne}
             />
           ))}
         </TableBody>

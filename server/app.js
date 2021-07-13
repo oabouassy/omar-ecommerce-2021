@@ -22,7 +22,7 @@ app.use("/api/admin", adminDashboard);
 app.use("/api/products", products);
 app.use("/api/customer", customerDashboard);
 app.use("/api/comment", comment);
-app.use("/api/stripe", stripeRouter);
+app.use("/api/stripe", cors(), stripeRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is up on ${PORT}`);

@@ -4,19 +4,18 @@ const charge = async (req, res) => {
   let { amount, id } = req.body;
   try {
     const payment = await stripe.paymentIntents.create({
-      amount,
+      amount: amount,
       currency: "USD",
-      description: "Your Company Description",
+      description: "Omar-Ecommerce Store",
       payment_method: id,
       confirm: true,
     });
-    console.log(`=========== ${payment} ===========`);
     res.json({
       message: "Payment Successful",
       success: true,
     });
   } catch (error) {
-    console.log(error.message);
+    console.log("stripe-routes.js 17 | error", error);
     res.json({
       message: "Payment Failed",
       success: false,

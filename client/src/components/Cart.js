@@ -5,6 +5,9 @@ import UserContext from "../context/userContext";
 import CartContext from "../context/CartContext";
 import { useHistory, Link } from "react-router-dom";
 import CartTable from "./CartTable";
+import cartTotalPriceContext from "../context/cartTotalPrice";
+import TotalPrice from "./TotalPrice";
+
 const useStyles = makeStyles(() => ({
   root: {
     marginTop: "8rem",
@@ -19,7 +22,7 @@ const Cart = () => {
   const classes = useStyles();
   const [userInfo] = useContext(UserContext);
   const [cartItems] = useContext(CartContext);
-  const [totalPrice, setTotalPrice] = useState(0);
+
   const SignInFirst = () => {
     return (
       <>
@@ -32,6 +35,7 @@ const Cart = () => {
       </>
     );
   };
+
   const ShowCartComponent = () => {
     return (
       <>
@@ -45,8 +49,8 @@ const Cart = () => {
           </Alert>
         ) : (
           <div>
-            <CartTable setTotalPrice={setTotalPrice} />
-            <h3>Total: {totalPrice} $</h3>
+            <CartTable />
+            <TotalPrice />
           </div>
         )}
       </>

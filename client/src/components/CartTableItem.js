@@ -7,6 +7,8 @@ import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 import cartContext from "../context/CartContext";
 import DeleteIcon from "@material-ui/icons/Delete";
+import cartTotalPriceContext from "../context/cartTotalPrice";
+
 // STYLING
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -32,45 +34,53 @@ const CartTableItem = ({
   name,
   category,
   amount,
-  price,
-  setTotalPrice,
+  priceOfAllItems,
+  priceOfOne,
 }) => {
   const [cartItems, setCartItems] = useContext(cartContext);
+  const [cartTotalPrice, setCartTotalPrice] = useContext(cartTotalPriceContext);
   const [isDeleted, setIsDeleted] = useState(false);
   const [changedAmount, setChangedAmount] = useState(amount);
-  const calcualteItemPrice = () => {
-    return +price * +changedAmount;
-  };
   function createData(id, name, category, changedAmount) {
     return {
       id,
       name,
       category,
       amount: changedAmount,
-      price: calcualteItemPrice(),
+      priceOfOne,
+      totalPrice: priceOfAllItems(),
     };
   }
   let row = createData(id, name, category, changedAmount);
+  // Reduce the product's amount
   const reduceAmount = () => {
-    if (changedAmount <= 1) {
+    if (changedAmount === 1) {
       deleteAction();
       return;
     }
     setChangedAmount(changedAmount - 1);
-    for (let obj of cartItems) {
-      if (obj.product_name === name) {
-        --obj.product_amount;
-        console.log("CART AFTER ( - ) ", cartItems);
+    setCartTotalPrice(cartTotalPrice - priceOfOne);
+    for (let item of cartItems) {
+      if (item.name === name) {
+        // reduce the amount
+        --item.amountOfItems;
         return;
       }
     }
   };
+  const deleteAction = () => {
+    const newCartItems = cartItems.filter((item) => item.id !== row.id);
+    setCartItems(newCartItems);
+    setCartTotalPrice(cartTotalPrice - priceOfOne);
+    setIsDeleted(true);
+  };
+  // increment the amount
   const increaseAmount = () => {
     setChangedAmount(changedAmount + 1);
-    for (let obj of cartItems) {
-      if (obj.product_name === name) {
-        ++obj.product_amount;
-        console.log("CART AFTER ( + ) ", cartItems);
+    setCartTotalPrice(cartTotalPrice + priceOfOne);
+    for (let item of cartItems) {
+      if (item.id === row.id) {
+        ++item.amountOfItems;
         return;
       }
     }
@@ -94,11 +104,6 @@ const CartTableItem = ({
       </Grid>
     );
   };
-  const deleteAction = () => {
-    const newCartItems = cartItems.filter((item) => item.product_id !== row.id);
-    setCartItems(newCartItems);
-    setIsDeleted(true);
-  };
   return (
     <>
       {!isDeleted ? (
@@ -109,7 +114,7 @@ const CartTableItem = ({
           <StyledTableCell align="right">{row.name}</StyledTableCell>
           <StyledTableCell align="right">{row.category}</StyledTableCell>
           <StyledTableCell align="right">{amountRow()}</StyledTableCell>
-          <StyledTableCell align="right">{row.price} $</StyledTableCell>
+          <StyledTableCell align="right">{row.totalPrice} $</StyledTableCell>
           <StyledTableCell align="right">
             <Button
               variant="contained"

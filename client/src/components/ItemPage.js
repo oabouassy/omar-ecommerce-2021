@@ -7,6 +7,7 @@ import {
   Button,
 } from "@material-ui/core";
 import cartContext from "../context/CartContext";
+import cartTotalPriceContext from "../context/cartTotalPrice";
 import userContext from "../context/userContext";
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -45,6 +46,7 @@ const ItemPage = (props) => {
   const productID = props.match.params.productID;
   const [product, setProduct] = useState({});
   const [cartItems, setCartItems] = useContext(cartContext);
+  const [cartTotalPrice, setCartTotalPrice] = useContext(cartTotalPriceContext);
   const [userInfo] = useContext(userContext);
   useEffect(() => {
     fetchProduct();
@@ -58,26 +60,35 @@ const ItemPage = (props) => {
       setProduct(data.product);
     }
   };
-  const addToCart = () => {
-    let isHere = false;
-    for (let obj of cartItems) {
-      if (obj.product_name === product.product_name) {
-        ++obj.product_amount;
-        isHere = true;
-        return;
+  const addMoreItem = () => {
+    let existedAndIncremented = false;
+    for (let item of cartItems) {
+      if (item.id === product.product_id) {
+        item.amountOfItems = item.amountOfItems + 1;
+        setCartTotalPrice(cartTotalPrice + item.priceOfOne);
+        existedAndIncremented = true;
       }
     }
-    if (!isHere) {
-      const productData = {
-        product_id: product.product_id,
-        product_name: product.product_name,
-        product_category: product.product_category,
-        product_amount: 1,
-        product_price: product.product_price,
+    return existedAndIncremented;
+  };
+  const addToCart = () => {
+    // if this product is already existed in the cart, increment its amount
+    const existedAndIncremented = addMoreItem();
+    // else, Adding a product for the first time
+    if (!existedAndIncremented) {
+      let item = {
+        id: product.product_id,
+        name: product.product_name,
+        category: product.product_category,
+        amountOfItems: 1,
+        priceOfOne: +product.product_price,
+        priceOfAllItems: () => {
+          return item.priceOfOne * item.amountOfItems;
+        },
       };
-      let temp = cartItems;
-      temp.push(productData);
-      setCartItems(temp);
+      cartItems.push(item);
+      setCartItems(cartItems);
+      setCartTotalPrice(cartTotalPrice + item.priceOfOne);
     }
   };
   return (
