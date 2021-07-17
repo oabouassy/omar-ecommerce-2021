@@ -61,7 +61,7 @@ export const MyDrawer = ({ drawer, toggleDrawer }) => {
             ? createListItem(
                 "My Account",
                 <AccountCircleIcon />,
-                "/user/account/dashboard"
+                "/user/my-account"
               )
             : null}
           {userInfo.customer_isadmin

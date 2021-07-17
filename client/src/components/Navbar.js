@@ -66,7 +66,7 @@ const Navbar = () => {
           </Typography>
           <FloatingActionButton />
           <Link to="/auth/login" className={classes.btnLink}>
-            {userInfo.customer_email ? (
+            {userInfo.customer_id ? (
               <Button color="inherit">Sign Out</Button>
             ) : (
               <Button color="inherit">Login</Button>

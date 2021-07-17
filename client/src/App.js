@@ -20,13 +20,18 @@ import CartContext from "./context/CartContext";
 import cartTotalPriceContext from "./context/cartTotalPrice";
 import Home from "./components/Home";
 import Cart from "./components/Cart";
+import ProductForm from "./components/ProductForm";
+import ManageCustomers from "./components/ManageCustomers";
+import MyAccount from "./components/MyAccount";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
   const [cartItems, setCartItems] = useState([]);
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
   useEffect(() => {
-    grabUserInfo();
+    if (!userInfo.customer_id) {
+      grabUserInfo();
+    }
   }, []);
   const grabUserInfo = async () => {
     const res = await fetch("http://localhost:5000/api/auth/verify", {
@@ -100,20 +105,47 @@ function App() {
                   render={(props) => <ItemPage {...props} />}
                 />
                 <Route
+                  exact
                   path="/admin/dashboard"
                   render={() =>
-                    userInfo.customer_isadmin ? (
+                    userInfo?.customer_isadmin ? (
                       <Dashboard />
                     ) : (
                       <NotAllowedPage />
                     )
                   }
                 />
-
+                <Route
+                  exact
+                  path="/admin/dashboard/add-product"
+                  render={() =>
+                    userInfo?.customer_isadmin ? (
+                      <ProductForm />
+                    ) : (
+                      <NotAllowedPage />
+                    )
+                  }
+                />
+                <Route
+                  exact
+                  path="/admin/dashboard/manage-customers"
+                  render={() =>
+                    userInfo?.customer_isadmin ? (
+                      <ManageCustomers />
+                    ) : (
+                      <NotAllowedPage />
+                    )
+                  }
+                />
                 <Route
                   exact
                   path="/about"
                   render={(props) => <About {...props} />}
+                />
+                <Route
+                  exact
+                  path="/user/my-account"
+                  render={(props) => <MyAccount {...props} />}
                 />
               </Switch>
               <StickyFooter />

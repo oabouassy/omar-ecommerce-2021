@@ -29,7 +29,7 @@ const StyledTableCell = withStyles((theme) => ({
 // COMPONENT
 const CartTable = () => {
   const classes = useStyles();
-  const [cartItems, setCartItems] = useContext(cartContext);
+  const [cartItems] = useContext(cartContext);
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">

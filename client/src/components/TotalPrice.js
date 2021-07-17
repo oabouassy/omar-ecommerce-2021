@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import StripeContainer from "./Stripe/StripeContainer";
 import cartTotalPriceContext from "../context/cartTotalPrice";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -29,8 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TotalPrice = () => {
   const classes = useStyles();
-  const [cartTotalPrice, setCartTotalPrice] = useContext(cartTotalPriceContext);
-  const [payNow, setPayNow] = useState(false);
+  const [cartTotalPrice] = useContext(cartTotalPriceContext);
   return (
     <Grid>
       <Typography variant="h5" className={classes.price}>

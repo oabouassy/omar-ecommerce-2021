@@ -10,6 +10,7 @@ import cartContext from "../context/CartContext";
 import cartTotalPriceContext from "../context/cartTotalPrice";
 import userContext from "../context/userContext";
 import Tooltip from "@material-ui/core/Tooltip";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +49,7 @@ const ItemPage = (props) => {
   const [cartItems, setCartItems] = useContext(cartContext);
   const [cartTotalPrice, setCartTotalPrice] = useContext(cartTotalPriceContext);
   const [userInfo] = useContext(userContext);
+  const [deleted, setDeleted] = useState(false);
   useEffect(() => {
     fetchProduct();
   }, []);
@@ -91,73 +93,110 @@ const ItemPage = (props) => {
       setCartTotalPrice(cartTotalPrice + item.priceOfOne);
     }
   };
+  const deleteProduct = async (e) => {
+    e.preventDefault();
+    const id = product.product_id;
+    const res = await fetch(`http://localhost:5000/api/products/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    });
+    const data = await res.json();
+    if (data.deleted) {
+      setDeleted(true);
+    }
+  };
   return (
     <Container maxWidth="lg" className={classes.root}>
-      {/* Outer Container */}
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          {/* Container for: title & image */}
-          <div className={classes.fContainer}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="h3" className={classes.header}>
-                  {product.product_name}
-                </Typography>
+      {product.product_id ? (
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            {/* Container for: title & image */}
+            <div className={classes.fContainer}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="h3" className={classes.header}>
+                    {product.product_name}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <img
+                    className={classes.media}
+                    src={`http://localhost:5000${product.product_img_link}`}
+                    alt={product.product_name}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <img
-                  className={classes.media}
-                  src={`http://localhost:5000${product.product_img_link}`}
-                  alt={product.product_name}
-                />
-              </Grid>
-            </Grid>
-          </div>
-        </Grid>
+            </div>
+          </Grid>
 
-        <Grid item xs={12} md={6}>
-          {/* Container for: price & Description */}
-          <div className={classes.sContainer}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="h6">{product.product_price} $</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body1">
-                  {product.product_details}
-                </Typography>
-                {userInfo.customer_id ? (
+          <Grid item xs={12} md={6}>
+            {/* Container for: price & Description */}
+            <div className={classes.sContainer}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="h6">
+                    {product.product_price} $
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="body1">
+                    {product.product_details}
+                  </Typography>
+                  {userInfo.customer_id ? (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={addToCart}
+                      className={classes.button}
+                    >
+                      Add to Cart
+                    </Button>
+                  ) : (
+                    <Tooltip
+                      title="Sign in to add this product to your cart"
+                      placement="top"
+                    >
+                      <Link to="/auth/login" className={classes.link}>
+                        <Button color="secondary" variant="contained">
+                          Sign in
+                        </Button>
+                      </Link>
+                    </Tooltip>
+                  )}
+
+                  <Link to="/customer/cart" className={classes.link}>
+                    go to my cart
+                  </Link>
                   <Button
-                    color="primary"
                     variant="contained"
-                    onClick={addToCart}
-                    className={classes.button}
+                    color="secondary"
+                    onClick={deleteProduct}
                   >
-                    Add to Cart
+                    Delete This Product
                   </Button>
-                ) : (
-                  <Tooltip
-                    title="Sign in to add this product to your cart"
-                    placement="top"
-                  >
-                    <Link to="/auth/login" className={classes.link}>
-                      <Button color="secondary" variant="contained">
-                        Sign in
-                      </Button>
-                    </Link>
-                  </Tooltip>
-                )}
-
-                <Link to="/customer/cart" className={classes.link}>
-                  go to my cart
-                </Link>
+                  {deleted ? (
+                    <Alert severity="success">
+                      <AlertTitle>Success</AlertTitle>
+                      Your product has been deleted succesfully —{" "}
+                      <strong>refresh the page!</strong>
+                    </Alert>
+                  ) : null}
+                </Grid>
+                {/* <Grid item></Grid> */}
               </Grid>
-              {/* <Grid item></Grid> */}
-            </Grid>
-          </div>
+            </div>
+          </Grid>
+          {/* Container for Add to Card */}
         </Grid>
-        {/* Container for Add to Card */}
-      </Grid>
+      ) : (
+        <Alert severity="info">
+          <AlertTitle>Not Available</AlertTitle>
+          This Product is NOT available right now !{" "}
+          <strong>please, come back later!</strong>
+        </Alert>
+      )}
     </Container>
   );
 };

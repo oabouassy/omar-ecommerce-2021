@@ -2,17 +2,18 @@ const router = require("express").Router();
 const authorize = require("../middleware/authorize");
 const {
   getAllCustomers,
+  getUserInfo,
   deleteCustomer,
-  getBlockedCustomers,
   blockCustomer,
   unblockCustomer,
 } = require("../controller/customerController");
 
 router.get("/", authorize, getAllCustomers);
 
-router.delete("/delete/:id", authorize, deleteCustomer);
+// GET A SPECIFIC CUSTOMER INFORMATION -> display it in 'my account' page
+router.get("/:id", getUserInfo);
 
-router.get("/blockedCustomers", authorize, getBlockedCustomers);
+router.delete("/delete/:id", authorize, deleteCustomer);
 
 router.put("/block/:id", authorize, blockCustomer);
 

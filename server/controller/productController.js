@@ -4,7 +4,7 @@ const fs = require("fs");
 const addProduct = (req, res) => {
   const image = req.file;
   const extension = image.mimetype.split("/")[1];
-  const { name, details, category, review } = req.body;
+  const { name, details, category, price, review } = req.body;
   fs.rename(
     `./public/imgs/${image.filename}`,
     `./public/imgs/${image.filename}.${extension}`,
@@ -12,8 +12,8 @@ const addProduct = (req, res) => {
       const img_link = `/imgs/${image.filename}.${extension}`;
       try {
         const result = await db.query(
-          "INSERT INTO product (product_name, product_details, product_img_link, product_category, product_review) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-          [name, details, img_link, category, +review]
+          "INSERT INTO product (product_name, product_details, product_img_link, product_category, product_review, product_price) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+          [name, details, img_link, category, +review, +price]
         );
         const product = result.rows[0];
         res.json({ added: true, product });

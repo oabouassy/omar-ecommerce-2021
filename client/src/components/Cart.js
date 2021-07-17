@@ -1,11 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Container, makeStyles, Typography } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import UserContext from "../context/userContext";
 import CartContext from "../context/CartContext";
 import { useHistory, Link } from "react-router-dom";
 import CartTable from "./CartTable";
-import cartTotalPriceContext from "../context/cartTotalPrice";
 import TotalPrice from "./TotalPrice";
 
 const useStyles = makeStyles(() => ({
