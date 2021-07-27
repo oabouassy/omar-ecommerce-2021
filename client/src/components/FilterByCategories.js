@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   link: {
     textDecoration: "none",
   },
+  margin: {
+    marginBottom: "2rem",
+  },
 }));
 
 const FilterByCategories = (props) => {
@@ -42,7 +45,7 @@ const FilterByCategories = (props) => {
     }
   };
   return (
-    <>
+    <div className={classes.margin}>
       <FormControl className={classes.formControl}>
         <InputLabel shrink htmlFor="products-categories">
           Category
@@ -64,7 +67,7 @@ const FilterByCategories = (props) => {
         </NativeSelect>
         <FormHelperText>Products Categories</FormHelperText>
       </FormControl>
-    </>
+    </div>
   );
 };
 

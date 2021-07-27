@@ -22,7 +22,6 @@ import Home from "./components/Home";
 import Cart from "./components/Cart";
 import ProductForm from "./components/ProductForm";
 import ManageCustomers from "./components/ManageCustomers";
-import MyAccount from "./components/MyAccount";
 import AddNewAdmin from "./components/AddNewAdmin";
 
 function App() {
@@ -153,11 +152,6 @@ function App() {
                   exact
                   path="/about"
                   render={(props) => <About {...props} />}
-                />
-                <Route
-                  exact
-                  path="/user/my-account"
-                  render={(props) => <MyAccount {...props} />}
                 />
               </Switch>
               <StickyFooter />

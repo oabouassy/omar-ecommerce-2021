@@ -12,6 +12,7 @@ import { MyDrawer } from "./Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 import userContext from "../context/userContext";
 import FloatingActionButton from "../components/FloatingActionButton";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const classes = useStyles();
   const [userInfo] = useContext(userContext);
+  const mediumScreen = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   // DRAWER
   const [drawer, setDrawer] = useState(false);
   const toggleDrawer = (open) => (event) => {
@@ -64,7 +66,7 @@ const Navbar = () => {
           <Typography variant="h6" className={classes.title}>
             <Link to="/">Omar Abouassy</Link>
           </Typography>
-          <FloatingActionButton />
+          {mediumScreen ? <FloatingActionButton /> : null}
           <Link to="/auth/login" className={classes.btnLink}>
             {userInfo.customer_id ? (
               <Button color="inherit">Sign Out</Button>

@@ -3,21 +3,30 @@ import { makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  curved: {
+    position: "relative",
+    background: "#2c3e50",
+    borderBottomLeftRadius: "50% 20%",
+    borderBottomRightRadius: "50% 20%",
     textAlign: "center",
-    margin: "auto",
+    marginTop: "4em",
+    paddingBottom: "5rem",
+    background: "#313f8c",
+    overflow: "hidden",
+    marginBottom: "34vh",
   },
-  header: {
-    marginTop: "1em",
+  margin: {
+    paddingTop: "5.3rem",
+    color: "#e1e1e1",
   },
 }));
 const Header = () => {
   const classes = useStyles();
   const isSmall = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   return (
-    <section>
+    <section className={classes.curved}>
       <Container>
-        <div className={classes.root}>
+        <div className={classes.margin}>
           <Grid container>
             <Grid item xs={12}>
               <Typography

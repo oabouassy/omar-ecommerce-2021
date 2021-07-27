@@ -26,9 +26,6 @@ const useStyles = makeStyles({
   link: {
     textDecoration: "none",
     color: "inherit",
-    // "&:hover": {
-    //   textDecoration: "underline",
-    // },
   },
 });
 
@@ -57,13 +54,6 @@ export const MyDrawer = ({ drawer, toggleDrawer }) => {
           {createListItem("Home", <HomeIcon />, "/")}
           {createListItem("Products", <StoreIcon />, "/products")}
           {createListItem("Cart", <ShoppingCartIcon />, "/customer/cart")}
-          {userInfo.customer_email
-            ? createListItem(
-                "My Account",
-                <AccountCircleIcon />,
-                "/user/my-account"
-              )
-            : null}
           {userInfo.customer_isadmin
             ? createListItem(
                 "Admin Dashboard",

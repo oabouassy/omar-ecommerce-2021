@@ -13,16 +13,22 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     display: "block",
     margin: "auto",
-    marginTop: theme.spacing(3),
+    marginTop: "3rem",
   },
   noProducts: {
     marginTop: theme.spacing(3),
+  },
+  header: {
+    marginBottom: "2rem",
+    padding: "1rem",
+    borderLeft: "6px solid #313f8c",
   },
 }));
 
 const Products = ({ page }) => {
   const classes = useStyles();
   let [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(page);
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -37,6 +43,7 @@ const Products = ({ page }) => {
   const history = useHistory();
   const handlePageChange = () => {
     history.push(`/products/p/${++page}`);
+    setCurrentPage(++page);
   };
   const displayProducts = () => {
     return products.map((product) => (
@@ -54,14 +61,18 @@ const Products = ({ page }) => {
   return (
     <div>
       <Container>
-        <Typography variant="h4">Browse Our Products</Typography>
-        <FilterByCategories />
+        <Typography variant="h4" className={classes.header}>
+          Recently Added
+        </Typography>
+        <div className="filter">
+          <FilterByCategories />
+        </div>
         <Grid container spacing={2}>
           {products.length !== 0 ? (
             displayProducts()
           ) : (
             <Typography variant="h6" className={classes.noProducts}>
-              No Products Available
+              No avaiable products
             </Typography>
           )}
         </Grid>
@@ -72,7 +83,7 @@ const Products = ({ page }) => {
             onClick={handlePageChange}
             className={classes.btn}
           >
-            Show More Products
+            Browse More
           </Button>
         ) : null}
       </Container>
