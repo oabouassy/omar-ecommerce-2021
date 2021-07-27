@@ -23,6 +23,7 @@ import Cart from "./components/Cart";
 import ProductForm from "./components/ProductForm";
 import ManageCustomers from "./components/ManageCustomers";
 import MyAccount from "./components/MyAccount";
+import AddNewAdmin from "./components/AddNewAdmin";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -132,6 +133,17 @@ function App() {
                   render={() =>
                     userInfo?.customer_isadmin ? (
                       <ManageCustomers />
+                    ) : (
+                      <NotAllowedPage />
+                    )
+                  }
+                />
+                <Route
+                  exact
+                  path="/admin/dashboard/promote-user"
+                  render={() =>
+                    userInfo?.customer_isadmin ? (
+                      <AddNewAdmin />
                     ) : (
                       <NotAllowedPage />
                     )

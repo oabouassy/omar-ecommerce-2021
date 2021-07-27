@@ -13,6 +13,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
 import { Link } from "react-router-dom";
+import ProductComments from "./ProductComments";
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: "8rem",
@@ -110,86 +111,93 @@ const ItemPage = (props) => {
   return (
     <Container maxWidth="lg" className={classes.root}>
       {product.product_id ? (
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            {/* Container for: title & image */}
-            <div className={classes.fContainer}>
+        <div>
+          <Grid container>
+            <Grid item xs={12}>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Typography variant="h3" className={classes.header}>
-                    {product.product_name}
-                  </Typography>
+                <Grid item xs={12} md={6}>
+                  {/* Container for: title & image */}
+                  <div className={classes.fContainer}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Typography variant="h3" className={classes.header}>
+                          {product.product_name}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <img
+                          className={classes.media}
+                          src={`http://localhost:5000${product.product_img_link}`}
+                          alt={product.product_name}
+                        />
+                      </Grid>
+                    </Grid>
+                  </div>
                 </Grid>
-                <Grid item xs={12}>
-                  <img
-                    className={classes.media}
-                    src={`http://localhost:5000${product.product_img_link}`}
-                    alt={product.product_name}
-                  />
-                </Grid>
-              </Grid>
-            </div>
-          </Grid>
 
-          <Grid item xs={12} md={6}>
-            {/* Container for: price & Description */}
-            <div className={classes.sContainer}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Typography variant="h6">
-                    {product.product_price} $
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1">
-                    {product.product_details}
-                  </Typography>
-                  {userInfo.customer_id ? (
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={addToCart}
-                      className={classes.button}
-                    >
-                      Add to Cart
-                    </Button>
-                  ) : (
-                    <Tooltip
-                      title="Sign in to add this product to your cart"
-                      placement="top"
-                    >
-                      <Link to="/auth/login" className={classes.link}>
-                        <Button color="secondary" variant="contained">
-                          Sign in
+                <Grid item xs={12} md={6}>
+                  {/* Container for: price & Description */}
+                  <div className={classes.sContainer}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Typography variant="h6">
+                          {product.product_price} $
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="body1">
+                          {product.product_details}
+                        </Typography>
+                        {userInfo.customer_id ? (
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={addToCart}
+                            className={classes.button}
+                          >
+                            Add to Cart
+                          </Button>
+                        ) : (
+                          <Tooltip
+                            title="Sign in to add this product to your cart"
+                            placement="top"
+                          >
+                            <Link to="/auth/login" className={classes.link}>
+                              <Button color="secondary" variant="contained">
+                                Sign in
+                              </Button>
+                            </Link>
+                          </Tooltip>
+                        )}
+
+                        <Link to="/customer/cart" className={classes.link}>
+                          go to my cart
+                        </Link>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={deleteProduct}
+                        >
+                          Delete This Product
                         </Button>
-                      </Link>
-                    </Tooltip>
-                  )}
-
-                  <Link to="/customer/cart" className={classes.link}>
-                    go to my cart
-                  </Link>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={deleteProduct}
-                  >
-                    Delete This Product
-                  </Button>
-                  {deleted ? (
-                    <Alert severity="success">
-                      <AlertTitle>Success</AlertTitle>
-                      Your product has been deleted succesfully —{" "}
-                      <strong>refresh the page!</strong>
-                    </Alert>
-                  ) : null}
+                        {deleted ? (
+                          <Alert severity="success">
+                            <AlertTitle>Success</AlertTitle>
+                            Your product has been deleted succesfully —{" "}
+                            <strong>refresh the page!</strong>
+                          </Alert>
+                        ) : null}
+                      </Grid>
+                      {/* <Grid item></Grid> */}
+                    </Grid>
+                  </div>
                 </Grid>
-                {/* <Grid item></Grid> */}
+                {/* Container for Add to Card */}
               </Grid>
-            </div>
+            </Grid>
           </Grid>
-          {/* Container for Add to Card */}
-        </Grid>
+          <ProductComments productId={product.product_id} />
+        </div>
       ) : (
         <Alert severity="info">
           <AlertTitle>Not Available</AlertTitle>

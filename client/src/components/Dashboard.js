@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles, Container } from "@material-ui/core";
 import AddNewProduct from "./AddNewProduct";
 import GetAllCustomersAccordion from "./GetAllCustomersAccordion";
+import PromoteUser from "./PromoteUser";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,6 +22,8 @@ const Dashboard = () => {
         <AddNewProduct />
         {/* SHOW ALL CUSTOMERS */}
         <GetAllCustomersAccordion />
+        {/* ADD NEW ADMIN */}
+        <PromoteUser />
       </Container>
     </div>
   );
