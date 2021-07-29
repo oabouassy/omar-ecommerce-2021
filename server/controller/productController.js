@@ -28,6 +28,10 @@ const addProduct = (req, res) => {
 const deleteProduct = async (req, res) => {
   const id = req.params.id;
   try {
+    const deleteAssiosiatedComments = await db.query(
+      "DELETE FROM comment WHERE product_id = $1",
+      [id]
+    );
     const result = await db.query(
       "DELETE FROM product WHERE product_id = $1 RETURNING *",
       [id]

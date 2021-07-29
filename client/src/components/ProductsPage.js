@@ -16,6 +16,11 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     marginTop: theme.spacing(3),
   },
+  header: {
+    marginBottom: "2rem",
+    padding: "1rem",
+    borderLeft: "6px solid #313f8c",
+  },
 }));
 
 const ProductsPage = (props) => {
@@ -49,8 +54,9 @@ const ProductsPage = (props) => {
       <Container className={classes.root}>
         {!empty ? (
           <>
-            <Typography variant="h3">All products</Typography>
-            <Typography variant="body1">page: {page}</Typography>
+            <Typography variant="h4" className={classes.header}>
+              All products
+            </Typography>
             <FilterByCategories />
             <Grid container spacing={2} className={classes.grid}>
               {products.map((product) => (
@@ -68,11 +74,13 @@ const ProductsPage = (props) => {
                 </Grid>
               ))}
             </Grid>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={handlePageChange}
-            />
+            <div style={{ marginTop: "3rem" }}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={handlePageChange}
+              />
+            </div>
           </>
         ) : (
           <h4>There are no more products !</h4>

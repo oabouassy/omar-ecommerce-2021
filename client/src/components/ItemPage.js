@@ -58,6 +58,7 @@ const ItemPage = (props) => {
   const [cartItems, setCartItems] = useContext(cartContext);
   const [cartTotalPrice, setCartTotalPrice] = useContext(cartTotalPriceContext);
   const [userInfo] = useContext(userContext);
+  console.log(userInfo);
   const [deleted, setDeleted] = useState(false);
   const mediumScreen = useMediaQuery((theme) => theme.breakpoints.up("md"));
   useEffect(() => {
@@ -165,12 +166,12 @@ const ItemPage = (props) => {
               <div className={classes.sContainer}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <Typography variant="h6">
+                    <Typography variant="h6" style={{ textAlign: "left" }}>
                       {product.product_price} $
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="body1">
+                    <Typography variant="body1" style={{ textAlign: "left" }}>
                       {product.product_details}
                     </Typography>
                     {userInfo.customer_id ? (
@@ -195,14 +196,16 @@ const ItemPage = (props) => {
                       </Tooltip>
                     )}
                     <ToastContainer draggable />
-                    <Button
-                      className={classes.button}
-                      variant="outlined"
-                      color="secondary"
-                      onClick={deleteProduct}
-                    >
-                      Delete This Product
-                    </Button>
+                    {userInfo.customer_id ? (
+                      <Button
+                        className={classes.button}
+                        variant="outlined"
+                        color="secondary"
+                        onClick={deleteProduct}
+                      >
+                        Delete This Product
+                      </Button>
+                    ) : null}
                   </Grid>
                 </Grid>
               </div>

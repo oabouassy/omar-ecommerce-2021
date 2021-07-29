@@ -3,6 +3,7 @@ import userContext from "../context/userContext";
 import { Typography, Paper, Grid, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -130,40 +131,56 @@ const ProductComments = ({ productId }) => {
       {!error && comments.length === 0 ? <h3>No comments yet</h3> : null}
       {!error && comments.length > 0 ? <ShowComments /> : null}
       {/* ADD NEW COMMENT */}
-      <div className={classes.newComment}>
-        <Grid container spacing={4} alignItems="center">
-          <Grid item xs={10} sm={8}>
-            <TextField
-              id="standard-multiline-flexible"
-              label="Write a comment ... "
-              multiline
-              fullWidth
-              maxRows={4}
-              value={commentValue}
-              onChange={handleCommentChange}
-            />
+      {userInfo.customer_id ? (
+        <div className={classes.newComment}>
+          <Grid container spacing={4} alignItems="center">
+            <Grid item xs={10} sm={8}>
+              <TextField
+                id="standard-multiline-flexible"
+                label="Write a comment ... "
+                multiline
+                fullWidth
+                maxRows={4}
+                value={commentValue}
+                onChange={handleCommentChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={addNewComment}
+              >
+                Add Comment
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={4}>
-            <Button variant="contained" color="primary" onClick={addNewComment}>
-              Add Comment
-            </Button>
-          </Grid>
-        </Grid>
-        {err ? (
-          <div className={classes.alert}>
-            <Alert severity="error">
-              There is an error occured — add your comment again!
-            </Alert>
-          </div>
-        ) : null}
-        {isNew && !err ? (
-          <div className={classes.alert}>
-            <Alert severity="success">
-              Your comment has been added succesfully!
-            </Alert>
-          </div>
-        ) : null}
-      </div>
+          {err ? (
+            <div className={classes.alert}>
+              <Alert severity="error">
+                There is an error occured — add your comment again!
+              </Alert>
+            </div>
+          ) : null}
+          {isNew && !err ? (
+            <div className={classes.alert}>
+              <Alert severity="success">
+                Your comment has been added succesfully!
+              </Alert>
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        <Link to="/auth/login">
+          <Button
+            style={{ marginTop: "2rem" }}
+            variant="contained"
+            color="secondary"
+          >
+            Sign In to add a comment
+          </Button>
+        </Link>
+      )}
     </div>
   );
 };

@@ -21,6 +21,7 @@ router.get("/specific", getProductsByCategory);
 
 router.get("/single", getProduct);
 
+// TO-DO : add authorize below
 router.post("/add", authorize, upload.single("image"), addProduct);
 
 router.delete("/delete/:id", authorize, deleteProduct);

@@ -15,7 +15,12 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
   },
   root: {
-    marginTop: "5rem",
+    marginTop: "8rem",
+  },
+  header: {
+    marginBottom: "2rem",
+    padding: "1rem",
+    borderLeft: "6px solid #313f8c",
   },
 }));
 
@@ -55,7 +60,9 @@ const ProductCategory = (props) => {
   return (
     <div className={classes.root}>
       <Container>
-        <Typography variant="h4">{category.toUpperCase()}</Typography>
+        <Typography variant="h4" className={classes.header}>
+          {category.toUpperCase()}
+        </Typography>
         <FilterByCategories selectedCategory={category} />
         {msg ? (
           <h1>{msg}</h1>
@@ -77,14 +84,15 @@ const ProductCategory = (props) => {
             ))}
           </Grid>
         )}
-
-        <Pagination
-          count={totalPages}
-          color="primary"
-          page={page}
-          onChange={handlePageChange}
-          className={classes.pagination}
-        />
+        <div style={{ marginTop: "3rem" }}>
+          <Pagination
+            count={totalPages}
+            color="primary"
+            page={page}
+            onChange={handlePageChange}
+            className={classes.pagination}
+          />
+        </div>
       </Container>
     </div>
   );

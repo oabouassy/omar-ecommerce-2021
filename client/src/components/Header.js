@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottomLeftRadius: "50% 20%",
     borderBottomRightRadius: "50% 20%",
     textAlign: "center",
-    marginTop: "4em",
+    marginTop: "4rem",
     paddingBottom: "5rem",
     background: "#313f8c",
     overflow: "hidden",
