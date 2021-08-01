@@ -61,7 +61,6 @@ export const MyDrawer = ({ drawer, toggleDrawer }) => {
                 "/admin/dashboard"
               )
             : null}
-          {createListItem("About", <InfoIcon />, "/about")}
         </List>
         <Divider />
         <List>

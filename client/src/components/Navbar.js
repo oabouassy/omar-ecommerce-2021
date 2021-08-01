@@ -6,6 +6,8 @@ import {
   IconButton,
   Toolbar,
   Typography,
+  Grid,
+  Container,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { MyDrawer } from "./Drawer";
@@ -51,33 +53,35 @@ const Navbar = () => {
     setDrawer(open);
   };
   return (
-    <div className={classes.root}>
-      <AppBar position="fixed">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer(true)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            <Link to="/">Omar Abouassy</Link>
-          </Typography>
-          {mediumScreen ? <FloatingActionButton /> : null}
-          <Link to="/auth/login" className={classes.btnLink}>
-            {userInfo.customer_id ? (
-              <Button color="inherit">Sign Out</Button>
-            ) : (
-              <Button color="inherit">Login</Button>
-            )}
-          </Link>
-        </Toolbar>
-      </AppBar>
-      <MyDrawer toggleDrawer={toggleDrawer} drawer={drawer} />
-    </div>
+    <Container maxWidth="lg">
+      <div className={classes.root}>
+        <AppBar position="fixed">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              onClick={toggleDrawer(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="subtitle1" className={classes.title}>
+              <Link to="/">Omar Abouassy</Link>
+            </Typography>
+            {mediumScreen ? <FloatingActionButton /> : null}
+            <Link to="/auth/login" className={classes.btnLink}>
+              {userInfo.customer_id ? (
+                <Button color="inherit">Sign Out</Button>
+              ) : (
+                <Button color="inherit">Login</Button>
+              )}
+            </Link>
+          </Toolbar>
+        </AppBar>
+        <MyDrawer toggleDrawer={toggleDrawer} drawer={drawer} />
+      </div>
+    </Container>
   );
 };
 

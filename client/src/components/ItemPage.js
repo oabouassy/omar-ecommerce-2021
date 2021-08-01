@@ -25,10 +25,12 @@ const useStyles = makeStyles((theme) => ({
   header: {
     textAlign: "center",
     paddingBottom: "1rem",
+    textTransform: "capitalize",
   },
   media: {
     display: "block",
-    maxWidth: "25rem",
+    width: "30rem",
+    maxWidth: "100%",
     margin: "auto",
     borderRadius: "3%",
   },

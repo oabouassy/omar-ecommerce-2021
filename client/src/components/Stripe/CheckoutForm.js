@@ -2,11 +2,34 @@ import { useContext } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import cartTotalPriceContext from "../../context/cartTotalPrice";
 import "./stripe.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CheckoutForm = () => {
   const [cartTotalPrice] = useContext(cartTotalPriceContext);
   const stripe = useStripe();
   const elements = useElements();
+
+  // options for toastify
+  const errorOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+  const successOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -14,7 +37,6 @@ const CheckoutForm = () => {
       card: elements.getElement(CardElement),
     });
     if (!error) {
-      console.log("token generated!", paymentMethod);
       try {
         const { id } = paymentMethod;
         const res = await fetch("http://localhost:5000/api/stripe/charge", {
@@ -26,15 +48,15 @@ const CheckoutForm = () => {
           body: JSON.stringify({ amount: cartTotalPrice * 100, id }),
         });
         const data = await res.json();
-        console.log("data", data.success);
+        console.log(data);
         if (data.success) {
-          console.log("data.success => ", "payment successful!");
+          toast.success("Payment successful !", successOptions);
         }
       } catch (error) {
-        console.log("ERROR | ", error);
+        console.log("ERROR | ", error.message);
       }
     } else {
-      console.log(error.message);
+      toast.error(error.message, errorOptions);
     }
   };
   // STYLING
@@ -57,7 +79,12 @@ const CheckoutForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 400 }} id="payment-form">
+    <form
+      onSubmit={handleSubmit}
+      style={{ maxWidth: "35rem", width: "100%", margin: "auto" }}
+      id="payment-form"
+    >
+      <ToastContainer />
       <CardElement options={cardStyle} />
       <button className="stripeButton">Pay</button>
     </form>

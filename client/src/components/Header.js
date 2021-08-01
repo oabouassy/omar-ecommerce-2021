@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottomLeftRadius: "50% 20%",
     borderBottomRightRadius: "50% 20%",
     textAlign: "center",
-    marginTop: "4rem",
+    marginTop: "3rem",
     paddingBottom: "5rem",
     background: "#313f8c",
     overflow: "hidden",
@@ -25,27 +25,25 @@ const Header = () => {
   const isSmall = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   return (
     <section className={classes.curved}>
-      <Container>
-        <div className={classes.margin}>
-          <Grid container>
-            <Grid item xs={12}>
-              <Typography
-                className={classes.header}
-                variant={isSmall ? "h1" : "h2"}
-                component="h2"
-                gutterBottom
-              >
-                The Modern Market
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5" gutterBottom>
-                Buy All you want from one place by a few clicks
-              </Typography>
-            </Grid>
+      <div className={classes.margin}>
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography
+              className={classes.header}
+              variant={isSmall ? "h1" : "h2"}
+              component="h2"
+              gutterBottom
+            >
+              The Modern Market
+            </Typography>
           </Grid>
-        </div>
-      </Container>
+          <Grid item xs={12}>
+            <Typography variant="h5" gutterBottom>
+              Buy All you want from one place by a few clicks
+            </Typography>
+          </Grid>
+        </Grid>
+      </div>
     </section>
   );
 };

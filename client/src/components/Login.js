@@ -8,8 +8,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Alert, AlertTitle } from "@material-ui/lab";
 import UserContext from "../context/userContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,10 +59,29 @@ export default function Login() {
       [e.target.name]: e.target.value,
     });
   };
+  // options for toastify
+  const errorOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+  const successOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
   const onSubmit = async (e) => {
     e.preventDefault();
     if (email === "" || password === "") {
-      console.log("Email or password can't be empty !");
+      toast.error("Email or password can't be empty !", errorOptions);
       return;
     }
     try {
@@ -77,42 +97,63 @@ export default function Login() {
       if (user.customer_id) {
         // if he is blocked => alert("you are blocked")
         if (user.customer_isblocked) {
-          console.log("Sorry, Your account has been suspended!");
+          const notify = () =>
+            toast.error(
+              "Sorry, Your account has been suspended!",
+              errorOptions
+            );
+          notify();
           return;
         }
         // if he is an admin => alert ("done") + redirect to dash.
         if (user.customer_isadmin) {
-          console.log("Welcome boss! redirecting you to the dashboard ...");
+          const notify = () =>
+            toast.success(
+              "Welcome boss! redirecting you to the dashboard ...",
+              successOptions
+            );
+          notify();
           setUserInfo(user);
           localStorage.setItem("token", token);
+          setTimeout(() => {
+            history.push("/admin/dashboard");
+          }, 3000)
           return;
         } else {
           // if he is a regular user => alert("done") + redirect to home.
-          console.log(
-            "Happy to see you again, redirecting you to the home page ..."
+          toast.success(
+            "Happy to see you again, redirecting you to the home page ...",
+            successOptions
           );
           setUserInfo(user);
           localStorage.setItem("token", token);
+          setTimeout(() => {
+            history.push("/");
+          }, 3000)
           return;
         }
       }
       if (error) {
-        console.log("Please check your email and password !");
+        const notify = () =>
+          toast.error("Please check your email and password !", errorOptions);
+        notify();
       }
     } catch (error) {
       console.log("ERROR while signing in, check Login.js");
       console.log(error.message);
     }
   };
-  // fake@user.com
-  // omaradmin22
   const signOut = (e) => {
     e.preventDefault();
     localStorage.removeItem("token");
     setUserInfo({});
+    const notify = () =>
+      toast.success("Signed out succesfully", successOptions);
+    notify();
   };
   return (
     <Container component="main" maxWidth="xs">
+      <ToastContainer draggable />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />

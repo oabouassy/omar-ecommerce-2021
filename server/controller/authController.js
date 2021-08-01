@@ -4,15 +4,6 @@ const genJWT = require("../utils/genJWT");
 
 // SIGN UP
 const signUp = async (req, res) => {
-  /**
-   * customer_id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
-  customer_firstname VARCHAR(225) NOT NULL,
-  customer_lastname VARCHAR(225) NOT NULL,
-  customer_email VARCHAR(225) NOT NULL UNIQUE,
-  customer_password VARCHAR(225) NOT NULL ,
-  customer_isadmin BOOLEAN NOT NULL,
-  customer_isblocked BOOLEAN NOT NULL,
-   */
   const { firstname, lastname, email, password, isblocked, isadmin } = req.body;
   try {
     const user = await db.query(

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Container, Grid, Typography, Button } from "@material-ui/core";
 import MyCard from "./Card";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import FilterByCategories from "./FilterByCategories";
 
@@ -47,27 +46,26 @@ const Products = ({ page }) => {
   };
   const displayProducts = () => {
     return products.map((product) => (
-      <Grid item xs={12} sm={6} md={4} key={product.product_id}>
-        <Link to={`/product/id/${product.product_id}`} className={classes.link}>
-          <MyCard
-            image={`http://localhost:5000${product.product_img_link}`}
-            header={product.product_name}
-            body={product.product_details}
-          />
-        </Link>
+      <Grid item xs={12} sm={6} md={4} lg={3} key={product.product_id}>
+        <MyCard
+          image={`http://localhost:5000${product.product_img_link}`}
+          header={product.product_name}
+          body={product.product_details}
+          url={`/product/id/${product.product_id}`}
+        />
       </Grid>
     ));
   };
   return (
     <div>
-      <Container>
+      <Container maxWidth="lg">
         <Typography variant="h4" className={classes.header}>
           Recently Added
         </Typography>
         <div className="filter">
           <FilterByCategories />
         </div>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} style={{ justifyContent: "flex-start" }}>
           {products.length !== 0 ? (
             displayProducts()
           ) : (

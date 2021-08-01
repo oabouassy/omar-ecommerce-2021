@@ -5,16 +5,19 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import CardActions from "@material-ui/core/CardActions";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    maxWidth: "100%",
   },
   media: {
     height: 140,
   },
 }));
-const MyCard = ({ image, header, body }) => {
+const MyCard = ({ image, header, body, url }) => {
   const classes = useStyles();
 
   return (
@@ -30,6 +33,13 @@ const MyCard = ({ image, header, body }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
+      <CardActions>
+        <Link to={url}>
+          <Button size="medium" color="primary">
+            More Details
+          </Button>
+        </Link>
+      </CardActions>
     </Card>
   );
 };

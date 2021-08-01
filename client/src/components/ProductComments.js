@@ -4,6 +4,8 @@ import { Typography, Paper, Grid, TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,12 +35,9 @@ const useStyles = makeStyles((theme) => ({
 const ProductComments = ({ productId }) => {
   const classes = useStyles();
   const [userInfo] = useContext(userContext);
-  const [error, setError] = useState(false);
   const [comments, setComments] = useState([]);
   const [isCommentsUpdated, setIsCommentsUpdated] = useState(false);
   const [commentValue, setCommentValue] = useState("");
-  const [err, setErr] = useState(false);
-  const [isNew, setIsNew] = useState(false);
   useEffect(() => {
     getComments();
   }, [isCommentsUpdated]);
@@ -85,9 +84,31 @@ const ProductComments = ({ productId }) => {
   const handleCommentChange = (e) => {
     setCommentValue(e.target.value);
   };
+  // options for toastify
+  const errorOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+  const successOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
   const addNewComment = async () => {
     // if it's empty -> do nothing
-    if (commentValue.length === 0) return;
+    if (commentValue.length === 0) {
+      toast.error("Your comment is empty !", errorOptions);
+      return;
+    }
     // add it
     try {
       const res = await fetch(`http://localhost:5000/api/comment/add`, {
@@ -104,20 +125,15 @@ const ProductComments = ({ productId }) => {
       });
       const data = await res.json();
       if (data?.comment?.comment_id) {
+        toast.success("Your comment has been added !", successOptions);
         setIsCommentsUpdated(!isCommentsUpdated);
-        setErr(false);
-        setIsNew(true);
-        setTimeout(() => {
-          setIsNew(false);
-        }, 3000);
+        setCommentValue("");
+      } else {
+        toast.error("Error, try add it again !", errorOptions);
       }
     } catch (error) {
       console.log("ERROR while adding a new comment");
-      setErr(true);
-      setIsNew(false);
-      setTimeout(() => {
-        setErr(false);
-      }, 3000);
+      console.log(error.message);
     }
   };
   return (
@@ -125,9 +141,8 @@ const ProductComments = ({ productId }) => {
       <Typography variant="h4" className={classes.header}>
         Comments
       </Typography>
-      {error ? <h3>Error occured while fetching product's comments</h3> : null}
-      {!error && comments.length === 0 ? <h3>No comments yet</h3> : null}
-      {!error && comments.length > 0 ? <ShowComments /> : null}
+      {comments.length === 0 ? <h3>No comments yet</h3> : null}
+      {comments.length > 0 ? <ShowComments /> : null}
       {/* ADD NEW COMMENT */}
       {userInfo.customer_id ? (
         <div className={classes.newComment}>
@@ -153,20 +168,6 @@ const ProductComments = ({ productId }) => {
               </Button>
             </Grid>
           </Grid>
-          {err ? (
-            <div className={classes.alert}>
-              <Alert severity="error">
-                There is an error occured — add your comment again!
-              </Alert>
-            </div>
-          ) : null}
-          {isNew && !err ? (
-            <div className={classes.alert}>
-              <Alert severity="success">
-                Your comment has been added succesfully!
-              </Alert>
-            </div>
-          ) : null}
         </div>
       ) : (
         <Link to="/auth/login">

@@ -8,7 +8,9 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Alert, AlertTitle } from "@material-ui/lab";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  let history = useHistory();
   const [formInfo, setFormInfo] = useState({
     firstname: "",
     lastname: "",
@@ -53,16 +56,43 @@ export default function SignUp() {
     password: "",
   });
   let { firstname, lastname, email, password } = formInfo;
-  const [signedUp, setSignedUp] = useState(false);
-  const [error, setError] = useState({ isError: false, msg: "" });
   const onChange = (e) => {
     setFormInfo({
       ...formInfo,
       [e.target.name]: e.target.value,
     });
   };
+  // options for toastify
+  const errorOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+  const successOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
   const onSubmit = async (e) => {
     e.preventDefault();
+    // if anything field is empty => error;
+    if (
+      firstname === "" ||
+      lastname === "" ||
+      email === "" ||
+      password === ""
+    ) {
+      toast.error("All fields are required !", errorOptions);
+      return;
+    }
     const userInfo = {
       ...formInfo,
       isblocked: false,
@@ -76,15 +106,18 @@ export default function SignUp() {
       body: JSON.stringify(userInfo),
     });
     const data = await res.json();
-    setSignedUp(true);
     if (data.error) {
-      setError({ isError: true, msg: data.msg });
+      toast.error(data.msg, errorOptions);
     } else {
-      setError({ isError: false, msg: "" });
+      toast.success(data.msg, successOptions);
+      setTimeout(() => {
+        history.push("auth/login");
+      }, 3000);
     }
   };
   return (
     <Container component="main" maxWidth="xs">
+      <ToastContainer />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -93,21 +126,6 @@ export default function SignUp() {
           Sign up
         </Typography>
         <form className={classes.form} noValidate onSubmit={(e) => onSubmit(e)}>
-          <div className={classes.alerts}>
-            {signedUp && error.isError ? (
-              <Alert severity="error">
-                <AlertTitle>Error</AlertTitle>
-                {error.msg} — <strong>try again!</strong>
-              </Alert>
-            ) : null}
-            {signedUp && !error.isError ? (
-              <Alert severity="success">
-                <AlertTitle>Success</AlertTitle>
-                Your account has been created successfully —{" "}
-                <strong>Welcome!</strong>
-              </Alert>
-            ) : null}
-          </div>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
