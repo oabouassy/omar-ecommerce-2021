@@ -50,7 +50,7 @@ const signIn = async (req, res) => {
     if (user.rows.length === 0) {
       return res
         .status(401)
-        .json({ error: true, msg: "Invalid email or password!" });
+        .json({ error: true, msg: "Invalid email or password!", user: {} });
     }
     const validPassword = await bcrypt.compare(
       password,
@@ -59,7 +59,7 @@ const signIn = async (req, res) => {
     if (!validPassword) {
       return res
         .status(401)
-        .json({ error: true, msg: "Invalid email or password!" });
+        .json({ error: true, msg: "Invalid email or password!", user: {} });
     }
     const token = genJWT(user.rows[0].customer_id);
     return res.status(200).json({ error: false, token, user: user.rows[0] });

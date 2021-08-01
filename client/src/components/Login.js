@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -50,8 +50,7 @@ export default function Login() {
   const classes = useStyles();
   const [formInfo, setFormInfo] = useState({ email: "", password: "" });
   const { email, password } = formInfo;
-  const [attemptLogin, setAttemptLogin] = useState(false);
-  const [error, setError] = useState({ isError: false, msg: "" });
+  let history = useHistory();
 
   const onChange = (e) => {
     setFormInfo({
@@ -61,30 +60,56 @@ export default function Login() {
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formInfo),
-    });
-    const data = await res.json();
-    setAttemptLogin(true);
-    setTimeout(() => setAttemptLogin(false), 3000);
-    if (data.error) {
-      setError({ isError: true, msg: data.msg });
+    if (email === "" || password === "") {
+      console.log("Email or password can't be empty !");
+      return;
     }
-    if (data.token) {
-      localStorage.setItem("token", data.token);
-      setUserInfo(data.user);
-      setError({ isError: false, msg: "" });
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formInfo),
+      });
+      const data = await res.json();
+      const { token, user, error } = data;
+      if (user.customer_id) {
+        // if he is blocked => alert("you are blocked")
+        if (user.customer_isblocked) {
+          console.log("Sorry, Your account has been suspended!");
+          return;
+        }
+        // if he is an admin => alert ("done") + redirect to dash.
+        if (user.customer_isadmin) {
+          console.log("Welcome boss! redirecting you to the dashboard ...");
+          setUserInfo(user);
+          localStorage.setItem("token", token);
+          return;
+        } else {
+          // if he is a regular user => alert("done") + redirect to home.
+          console.log(
+            "Happy to see you again, redirecting you to the home page ..."
+          );
+          setUserInfo(user);
+          localStorage.setItem("token", token);
+          return;
+        }
+      }
+      if (error) {
+        console.log("Please check your email and password !");
+      }
+    } catch (error) {
+      console.log("ERROR while signing in, check Login.js");
+      console.log(error.message);
     }
   };
+  // fake@user.com
+  // omaradmin22
   const signOut = (e) => {
     e.preventDefault();
     localStorage.removeItem("token");
     setUserInfo({});
-    console.log("signout");
   };
   return (
     <Container component="main" maxWidth="xs">
@@ -96,21 +121,6 @@ export default function Login() {
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <div className={classes.alerts}>
-            {attemptLogin && error.isError ? (
-              <Alert severity="error">
-                <AlertTitle>Error</AlertTitle>
-                {error.msg} — <strong>try again!</strong>
-              </Alert>
-            ) : null}
-            {attemptLogin && !error.isError ? (
-              <Alert severity="success">
-                <AlertTitle>Success</AlertTitle>
-                You have been successfully logged in —{" "}
-                <strong>nice to see you again!</strong>
-              </Alert>
-            ) : null}
-          </div>
           <TextField
             variant="outlined"
             margin="normal"
