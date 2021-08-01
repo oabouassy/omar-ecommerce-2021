@@ -53,10 +53,8 @@ const ProductComments = ({ productId }) => {
       }
     );
     const data = await res.json();
-    if (data?.comments?.length > 0) {
+    if (data.comments?.length > 0) {
       setComments(data.comments);
-    } else {
-      setError(true);
     }
   };
   const ShowComments = () => {

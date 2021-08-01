@@ -23,6 +23,7 @@ import Cart from "./components/Cart";
 import ProductForm from "./components/ProductForm";
 import ManageCustomers from "./components/ManageCustomers";
 import AddNewAdmin from "./components/AddNewAdmin";
+import DemoteUserPage from "./components/DemoteUserPage";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -143,6 +144,17 @@ function App() {
                   render={() =>
                     userInfo?.customer_isadmin ? (
                       <AddNewAdmin />
+                    ) : (
+                      <NotAllowedPage />
+                    )
+                  }
+                />
+                <Route
+                  exact
+                  path="/admin/dashboard/demote-admin"
+                  render={() =>
+                    userInfo?.customer_isadmin ? (
+                      <DemoteUserPage />
                     ) : (
                       <NotAllowedPage />
                     )

@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AddNewAdmin = () => {
+const DemoteUserPage = () => {
   const [email, setEmail] = useState("");
   const classes = useStyles();
   const handleSubmit = async (e) => {
@@ -43,26 +43,34 @@ const AddNewAdmin = () => {
       autoClose: 2000,
     };
     if (email === "") {
-      toast("User email is empty!", ErrorOptions);
+      toast("Admin email is empty!", ErrorOptions);
       return;
     }
-    const res = await fetch(`http://localhost:5000/api/admin/add/${email}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        token: localStorage.getItem("token"),
-      },
-    });
-    const data = await res.json();
-    if (data.updated) {
-      const SuccessOptions = {
-        closeButton: true,
-        type: toast.TYPE.SUCCESS,
-        autoClose: 2000,
-      };
-      toast("This user is an admin now!", SuccessOptions);
-    } else {
-      toast("Error, Make sure it's a correct email", ErrorOptions);
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/admin/demote/${email}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+      const data = await res.json();
+      if (data.demoted) {
+        const SuccessOptions = {
+          closeButton: true,
+          type: toast.TYPE.SUCCESS,
+          autoClose: 2000,
+        };
+        toast("This user is a regular user now!", SuccessOptions);
+      } else if (data.msg) {
+        toast(`${data.msg}`, ErrorOptions);
+      }
+    } catch (error) {
+      console.log("ERROR while demoting an admin in DemoteUserPage.js");
+      console.log(error.message);
     }
   };
   return (
@@ -76,13 +84,13 @@ const AddNewAdmin = () => {
           className={classes.form}
         >
           <Typography variant="h4" className={classes.header}>
-            Add New Admin
+            Demote an admin
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
                 id="standard-basic"
-                label="user email"
+                label="admin email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 style={{ width: "100%" }}
@@ -95,7 +103,7 @@ const AddNewAdmin = () => {
                 onClick={handleSubmit}
                 style={{ display: "block", width: "100%" }}
               >
-                Modify Now
+                Demote Now
               </Button>
             </Grid>
           </Grid>
@@ -105,4 +113,4 @@ const AddNewAdmin = () => {
   );
 };
 
-export default AddNewAdmin;
+export default DemoteUserPage;

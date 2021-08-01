@@ -171,7 +171,10 @@ const ItemPage = (props) => {
                     </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="body1" style={{ textAlign: "left" }}>
+                    <Typography
+                      variant="body1"
+                      style={{ textAlign: "left", wordWrap: "break-word" }}
+                    >
                       {product.product_details}
                     </Typography>
                     {userInfo.customer_id ? (

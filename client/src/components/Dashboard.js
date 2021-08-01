@@ -3,6 +3,7 @@ import { makeStyles, Container } from "@material-ui/core";
 import AddNewProduct from "./AddNewProduct";
 import GetAllCustomersAccordion from "./GetAllCustomersAccordion";
 import PromoteUser from "./PromoteUser";
+import DemoteAdmin from "./DemoteAdmin";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -24,6 +25,8 @@ const Dashboard = () => {
         <GetAllCustomersAccordion />
         {/* ADD NEW ADMIN */}
         <PromoteUser />
+        {/* DEMOTE AN ADMIN */}
+        <DemoteAdmin />
       </Container>
     </div>
   );

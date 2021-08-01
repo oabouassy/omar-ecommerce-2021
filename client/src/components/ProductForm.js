@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductForm = () => {
   const classes = useStyles();
-  /* name, details, category, review */
   const [data, setData] = useState({
     name: "",
     details: "",
