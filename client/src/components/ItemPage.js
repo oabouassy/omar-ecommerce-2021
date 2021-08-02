@@ -11,7 +11,7 @@ import cartTotalPriceContext from "../context/cartTotalPrice";
 import userContext from "../context/userContext";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ProductComments from "./ProductComments";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { ToastContainer, toast } from "react-toastify";
@@ -55,13 +55,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ItemPage = (props) => {
   const classes = useStyles();
+  let history = useHistory();
   const productID = props.match.params.productID;
   const [product, setProduct] = useState({});
   const [cartItems, setCartItems] = useContext(cartContext);
   const [cartTotalPrice, setCartTotalPrice] = useContext(cartTotalPriceContext);
   const [userInfo] = useContext(userContext);
   console.log(userInfo);
-  const [deleted, setDeleted] = useState(false);
   const mediumScreen = useMediaQuery((theme) => theme.breakpoints.up("md"));
   useEffect(() => {
     fetchProduct();
@@ -86,6 +86,25 @@ const ItemPage = (props) => {
     }
     return existedAndIncremented;
   };
+  // options for toastify
+  const errorOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+  const successOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
   const addToCart = () => {
     // if this product is already existed in the cart, increment its amount
     const existedAndIncremented = addMoreItem();
@@ -106,13 +125,7 @@ const ItemPage = (props) => {
       setCartTotalPrice(cartTotalPrice + item.priceOfOne);
     }
     // Notification
-    const options = {
-      closeButton: true,
-      type: toast.TYPE.SUCCESS,
-      autoClose: 2000,
-    };
-    const notify = () => toast("Added to your cart", options);
-    notify();
+    toast.success("Added to your cart", successOptions);
   };
   const deleteProduct = async (e) => {
     e.preventDefault();
@@ -129,16 +142,18 @@ const ItemPage = (props) => {
       );
       const data = await res.json();
       if (data.deleted) {
-        setDeleted(true);
-        const options = {
-          closeButton: true,
-          type: toast.TYPE.DARK,
-          autoClose: 2000,
-        };
-        toast("Deleted succesfully — refresh the page!", options);
+        toast.success(
+          "Deleted succesfully — redirecting to home page...",
+          successOptions
+        );
+        setTimeout(() => {
+          history.push("/");
+        }, 3000);
+      } else {
+        toast.error("Error — please try again.", errorOptions);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
   return (

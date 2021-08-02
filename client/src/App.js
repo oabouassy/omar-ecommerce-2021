@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
-import About from "./components/About";
 import ProductCategory from "./components/ProductCategory";
 import ItemPage from "./components/ItemPage";
 import ProductsPage from "./components/ProductsPage";
@@ -159,11 +158,6 @@ function App() {
                       <NotAllowedPage />
                     )
                   }
-                />
-                <Route
-                  exact
-                  path="/about"
-                  render={(props) => <About {...props} />}
                 />
               </Switch>
               <StickyFooter />

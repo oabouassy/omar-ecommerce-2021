@@ -117,7 +117,7 @@ export default function Login() {
           localStorage.setItem("token", token);
           setTimeout(() => {
             history.push("/admin/dashboard");
-          }, 3000)
+          }, 3000);
           return;
         } else {
           // if he is a regular user => alert("done") + redirect to home.
@@ -129,7 +129,7 @@ export default function Login() {
           localStorage.setItem("token", token);
           setTimeout(() => {
             history.push("/");
-          }, 3000)
+          }, 3000);
           return;
         }
       }
