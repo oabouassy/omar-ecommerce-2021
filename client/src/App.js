@@ -23,6 +23,7 @@ import ProductForm from "./components/ProductForm";
 import ManageCustomers from "./components/ManageCustomers";
 import AddNewAdmin from "./components/AddNewAdmin";
 import DemoteUserPage from "./components/DemoteUserPage";
+import NotFound from "./components/NotFound";
 
 function App() {
   const [userInfo, setUserInfo] = useState({});
@@ -159,6 +160,9 @@ function App() {
                     )
                   }
                 />
+                <Router path="*">
+                  <NotFound />
+                </Router>
               </Switch>
               <StickyFooter />
             </div>

@@ -61,7 +61,6 @@ const ItemPage = (props) => {
   const [cartItems, setCartItems] = useContext(cartContext);
   const [cartTotalPrice, setCartTotalPrice] = useContext(cartTotalPriceContext);
   const [userInfo] = useContext(userContext);
-  console.log(userInfo);
   const mediumScreen = useMediaQuery((theme) => theme.breakpoints.up("md"));
   useEffect(() => {
     fetchProduct();

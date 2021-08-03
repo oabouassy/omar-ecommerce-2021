@@ -3,6 +3,8 @@ import { Container, Typography, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import Paper from "@material-ui/core/Paper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,10 +57,30 @@ const ProductForm = () => {
     image: "",
   });
   const [added, setAdded] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { name, details, category, review, price } = data;
+  // options for toastify
+  const errorOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
+  const successOptions = {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (
       name === "" ||
       details === "" ||
@@ -67,8 +89,7 @@ const ProductForm = () => {
       price === ""
     ) {
       setLoading(false);
-      setAdded(false);
-      setTimeout(() => setLoading(true), 2000);
+      toast.error("Error, ALL fields are required — try again!", errorOptions);
       return;
     }
     let formData = new FormData();
@@ -89,15 +110,18 @@ const ProductForm = () => {
       const dataFromServer = await res.json();
       setLoading(false);
       if (dataFromServer.added) {
-        setAdded(true);
-        setTimeout(() => setLoading(true), 2000);
+        // HEREE
+        toast.success(
+          "Your product has been added succesfully — check it out!",
+          successOptions
+        );
       } else {
-        setAdded(false);
-        setTimeout(() => setLoading(true), 2000);
+        toast.error("Sorry, an error occured — try again!", errorOptions);
       }
     } catch (error) {
       console.error("ProductForm uploading Error!!", error.message);
     }
+    setLoading(false);
   };
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -108,6 +132,7 @@ const ProductForm = () => {
   };
   return (
     <Container maxWidth="lg">
+      <ToastContainer draggable />
       <div className={classes.root}>
         <Paper elevation={3} className={classes.paper}>
           <form
@@ -173,23 +198,12 @@ const ProductForm = () => {
                 color="primary"
                 className={classes.btn}
                 onClick={handleSubmit}
+                disabled={loading}
               >
                 Add now
               </Button>
             </div>
           </form>
-          {added & !loading ? (
-            <Alert severity="success" className={classes.alert}>
-              <AlertTitle>Added</AlertTitle>
-              Your product has been added succesfully — check it out!
-            </Alert>
-          ) : null}
-          {!added && !loading ? (
-            <Alert severity="error" className={classes.alert}>
-              <AlertTitle>Error</AlertTitle>
-              Sorry, an error occured — <strong>try again!</strong>
-            </Alert>
-          ) : null}
         </Paper>
       </div>
     </Container>

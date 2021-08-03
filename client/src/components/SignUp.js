@@ -111,7 +111,7 @@ export default function SignUp() {
     } else {
       toast.success(data.msg, successOptions);
       setTimeout(() => {
-        history.push("auth/login");
+        history.push("/auth/login");
       }, 3000);
     }
   };

@@ -61,16 +61,12 @@ const ProductsPage = (props) => {
             <Grid container spacing={2} className={classes.grid}>
               {products.map((product) => (
                 <Grid item xs={12} sm={6} md={3} key={product.product_id}>
-                  <Link
-                    to={`/product/id/${product.product_id}`}
-                    className={classes.link}
-                  >
-                    <MyCard
-                      image={`http://localhost:5000${product.product_img_link}`}
-                      header={product.product_name}
-                      body={product.product_details}
-                    />
-                  </Link>
+                  <MyCard
+                    image={`http://localhost:5000${product.product_img_link}`}
+                    header={product.product_name}
+                    body={product.product_details}
+                    url={`/product/id/${product.product_id}`}
+                  />
                 </Grid>
               ))}
             </Grid>

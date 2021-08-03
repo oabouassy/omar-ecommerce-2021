@@ -74,6 +74,7 @@ const ProductCategory = (props) => {
                   image={`http://localhost:5000${product.product_img_link}`}
                   header={product.product_name}
                   body={product.product_details}
+                  url={`/product/id/${product.product_id}`}
                 />
               </Grid>
             ))}
