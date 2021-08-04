@@ -2,6 +2,10 @@
 
 A full stack e-commerce application comes with a lot of useful features with clean, minimal and simple design.
 
+## Project Demo on YouTube
+
+https://youtu.be/YNymmOkeHYo
+
 ## The purpose behind building Omar E-commerce application
 
 1. To Gain experience by working on a full stack application , starting from the back end and moving towards the front end.
